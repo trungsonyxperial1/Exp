@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EmXP</title>
+<meta name="theme-color" content="#0f1730">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EmXP">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0f1730; --surface: #17223f; --ink: #eef3ff; --muted: #9fb0d3;
+  --line: #2d3c63; --accent: #ffd23f; --accent-ink: #16233f; --note: #0f1832;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); background: #0f1730; background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.55; min-height: 100vh; }
+.wrap { max-width: 520px; margin: 0 auto; padding: 24px 18px 48px; }
+.top { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+.lang { display: inline-grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--ink); border-radius: 10px; overflow: hidden; }
+.lang input { position: absolute; opacity: 0; pointer-events: none; }
+.lang label { padding: 6px 14px; font-weight: 700; font-size: 13px; cursor: pointer; }
+.lang input:checked + label { background: var(--accent); color: var(--accent-ink); }
+.lang input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: -3px; }
+h1 { font-size: clamp(40px, 11vw, 60px); line-height: 1; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 10px; }
+.sub { color: var(--muted); margin: 0 0 28px; }
+.card { background: var(--surface); border: 2px solid var(--ink); border-radius: 14px; padding: 20px; box-shadow: 6px 6px 0 var(--ink); }
+fieldset { border: 0; padding: 0; margin: 0 0 18px; }
+legend, label.l { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: block; padding: 0; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg2 { grid-template-columns: 1fr 1fr; }
+.seg2 .wide { grid-column: 1 / -1; }
+.seg label { border: 2px solid var(--ink); border-radius: 10px; padding: 10px 6px; text-align: center; font-weight: 500; font-size: 14px; cursor: pointer; background: var(--surface); }
+.seg input:checked + label { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.seg input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
+input[type="date"], input[type="time"], input[type="text"], select { width: 100%; font: inherit; color: var(--ink); background: var(--surface); border: 2px solid var(--ink); border-radius: 10px; padding: 10px 12px; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.field { margin-bottom: 18px; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.out { margin-top: 22px; }
+.msg { background: var(--note); border: 2px dashed var(--line); border-radius: 12px; padding: 16px; white-space: pre-wrap; font-size: 15.5px; margin: 0 0 12px; min-height: 120px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+button { font: inherit; font-weight: 700; cursor: pointer; border: 2px solid var(--ink); border-radius: 10px; padding: 11px 16px; color: var(--ink); background: var(--surface); }
+button.primary { background: var(--accent); color: var(--accent-ink); flex: 1; }
+button:active { transform: translate(1px, 1px); }
+.hidden { display: none; }
+.foot { color: var(--muted); font-size: 13px; margin-top: 18px; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <div class="lang" role="radiogroup" aria-label="Language">
+      <input type="radio" name="lang" id="l-vi" value="vi" checked><label for="l-vi">Tiếng Việt</label>
+      <input type="radio" name="lang" id="l-en" value="en"><label for="l-en">English</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <fieldset>
+      <legend data-vi="Kiểu nghỉ" data-en="Type of leave"></legend>
+      <div class="seg seg2">
+        <input type="radio" name="type" id="t-full" value="full" checked><label for="t-full" class="wide" data-vi="Cả ngày" data-en="Full day"></label>
+        <input type="radio" name="type" id="t-offam" value="offam"><label for="t-offam" data-vi="Nghỉ sáng" data-en="Morning off"></label>
+        <input type="radio" name="type" id="t-offpm" value="offpm"><label for="t-offpm" data-vi="Nghỉ chiều" data-en="Afternoon off"></label>
+        <input type="radio" name="type" id="t-lateam" value="lateam"><label for="t-lateam" data-vi="Đi muộn sáng" data-en="Late in the morning"></label>
+        <input type="radio" name="type" id="t-latepm" value="latepm"><label for="t-latepm" data-vi="Đi muộn chiều" data-en="Late back from lunch"></label>
+      </div>
+    </fieldset>
+
+    <div class="pair" id="vi-pair">
+      <div class="field">
+        <label class="l" for="self" data-vi="Người gửi" data-en=""></label>
+        <select id="self">
+          <option value="em" selected>em</option><option value="tôi">tôi</option><option value="mình">mình</option>
+          <option value="tớ">tớ</option><option value="tui">tui</option><option value="con">con</option>
+          <option value="cháu">cháu</option><option value="anh">anh</option><option value="chị">chị</option>
+          <option value="cô">cô</option><option value="chú">chú</option><option value="bác">bác</option>
+          <option value="dì">dì</option><option value="cậu">cậu</option><option value="mợ">mợ</option>
+          <option value="thím">thím</option><option value="ông">ông</option><option value="bà">bà</option>
+          <option value="thầy">thầy</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="l" for="to" data-vi="Người nhận" data-en=""></label>
+        <select id="to">
+          <option value="anh/chị" selected>anh/chị</option><option value="anh">anh</option><option value="chị">chị</option>
+          <option value="em">em</option><option value="bạn">bạn</option><option value="sếp">sếp</option>
+          <option value="thầy/cô">thầy/cô</option><option value="thầy">thầy</option><option value="cô">cô</option>
+          <option value="chú">chú</option><option value="bác">bác</option><option value="dì">dì</option>
+          <option value="cậu">cậu</option><option value="mợ">mợ</option><option value="thím">thím</option>
+          <option value="ông">ông</option><option value="bà">bà</option>
+          <option value="mọi người">mọi người</option><option value="cả nhóm">cả nhóm</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pair hidden" id="en-pair">
+      <div class="field">
+        <label class="l" for="channel" data-vi="" data-en="Channel"></label>
+        <select id="channel">
+          <option value="email" data-vi="" data-en="Email"></option>
+          <option value="chat" data-vi="" data-en="Chat (Slack, Teams)"></option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="l" for="tone" data-vi="" data-en="Tone"></label>
+        <select id="tone">
+          <option value="formal" data-vi="" data-en="Formal"></option>
+          <option value="casual" data-vi="" data-en="Casual"></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field hidden" id="rname-field">
+      <label class="l" for="rname" data-vi="" data-en="Recipient name (optional)"></label>
+      <input type="text" id="rname" placeholder="Anna" autocomplete="off">
+    </div>
+
+    <div class="field hidden" id="sname-field">
+      <label class="l" for="sname" data-vi="" data-en="Your name (for the signature)"></label>
+      <input type="text" id="sname" placeholder="Minh" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label class="l" for="date" data-vi="Ngày" data-en="Date"></label>
+      <input type="date" id="date">
+    </div>
+
+    <div class="field hidden" id="late-field">
+      <label class="l" for="time" data-vi="Giờ đến dự kiến" data-en="Expected arrival time"></label>
+      <input type="time" id="time" value="09:30">
+    </div>
+
+    <div class="out">
+      <p class="msg" id="msg" aria-live="polite"></p>
+      <div class="row">
+        <button type="button" id="shuffle" data-vi="Đổi lý do" data-en="New reason"></button>
+        <button type="button" id="copy" class="primary"></button>
+      </div>
+    </div>
+  </div>
+  <p class="foot" data-vi="Lý do được chọn ngẫu nhiên. Đọc lại trước khi gửi." data-en="The reason is picked at random. Read it over before sending."></p>
+</main>
+
+<script>
+(function () {
+  var VI = {
+    full: ["nhà em có việc gia đình đột xuất cần xử lý", "em cần đi làm giấy tờ ở cơ quan nhà nước, chỉ làm việc trong giờ hành chính", "em bị đau đầu và cần nghỉ ngơi một ngày cho khỏe lại", "em phải đưa người nhà đi khám", "nhà em hôm nay sửa điện nước, cần có người ở nhà", "em đã tích đủ mệt và xin nạp lại năng lượng một ngày"],
+    half: ["em cần đi khám sức khỏe định kỳ", "em phải ra ngân hàng giải quyết giấy tờ", "nhà em có thợ đến sửa chữa, em cần ở nhà tiếp", "em có việc cá nhân cần giải quyết gấp", "em cần đưa người nhà đi làm thủ tục", "em hơi mệt, muốn nghỉ nửa ngày để lấy lại sức"],
+    late: ["đường hôm nay kẹt xe hơn dự kiến", "em phải đưa người nhà đi trước giờ làm", "xe em bất ngờ hỏng giữa đường", "em có việc nhà cần xử lý buổi sáng", "sáng nay em hơi mệt nên xuất phát chậm", "em phải ghé làm giấy tờ trước giờ đi làm"],
+    latepm: ["em có việc cần giải quyết gấp lúc nghỉ trưa", "em phải ghé ngân hàng làm giấy tờ lúc nghỉ trưa", "đường quay lại văn phòng sau giờ nghỉ trưa bị kẹt xe", "em đưa người nhà đi khám lúc nghỉ trưa nên chưa kịp quay lại", "xe em bất ngờ hỏng trên đường quay lại", "em hơi mệt nên cần nghỉ trưa lâu hơn một chút"]
+  };
+  var EN = {
+    full: ["I have a family matter to take care of", "I need to handle some paperwork that can only be done during office hours", "I’m not feeling well and need a day to rest", "I need to take a family member to an appointment", "we have repair work scheduled at home and someone needs to be there", "I need a day to recharge"],
+    half: ["I have a medical check-up", "I need to take care of some paperwork at the bank", "a technician is coming to my place", "I have a personal errand that can’t wait", "I need to take a family member to an appointment", "I’m a bit under the weather"],
+    late: ["traffic is much worse than expected", "I need to drop a family member off first", "my vehicle broke down on the way", "I have a family matter to handle this morning", "I’m not feeling great and starting the day slowly", "I need to stop by an office for paperwork first"],
+    latepm: ["I need to take care of an errand over lunch", "I have to stop by the bank during my lunch break", "traffic on the way back from lunch is heavy", "I’m taking a family member to an appointment over lunch", "my vehicle broke down on the way back", "my lunch break is running longer than expected"]
+  };
+  var DAYS = { vi: ["Chủ nhật", "thứ Hai", "thứ Ba", "thứ Tư", "thứ Năm", "thứ Sáu", "thứ Bảy"], en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] };
+  var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var L = "vi";
+  var idx = { vi: {}, en: {} };
+  ["full", "half", "late", "latepm"].forEach(function (k) {
+    idx.vi[k] = Math.floor(Math.random() * VI[k].length);
+    idx.en[k] = Math.floor(Math.random() * EN[k].length);
+  });
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function type() { return document.querySelector('input[name="type"]:checked').value; }
+  function rkey(t) { return t === "full" ? "full" : t === "latepm" ? "latepm" : t.indexOf("off") === 0 ? "half" : "late"; }
+
+  function viDate(d) {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var monday = function (x) { var m = new Date(x); m.setDate(m.getDate() - ((m.getDay() + 6) % 7)); m.setHours(0, 0, 0, 0); return m; };
+    var diff = Math.round((d - today) / 864e5);
+    var wk = Math.round((monday(d) - monday(today)) / (7 * 864e5));
+    var dm = pad(d.getDate()) + "/" + pad(d.getMonth() + 1);
+    var wd = DAYS.vi[d.getDay()];
+    if (diff === 0) return "hôm nay (" + wd + ", " + dm + ")";
+    if (diff === 1) return "mai (" + wd + ", " + dm + ")";
+    if (wk === 0 && diff > 1) return wd + " tuần này (" + dm + ")";
+    if (wk === 1) return wd + " tuần sau (" + dm + ")";
+    return wd + " ngày " + dm + "/" + d.getFullYear();
+  }
+
+  function enPlain(d) { return DAYS.en[d.getDay()] + ", " + MON[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear(); }
+  function enPlainFromValue(v) {
+    if (!v) return "[pick a date]";
+    var p = v.split("-");
+    return enPlain(new Date(+p[0], +p[1] - 1, +p[2]));
+  }
+  function enDate(d) {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var monday = function (x) { var m = new Date(x); m.setDate(m.getDate() - ((m.getDay() + 6) % 7)); m.setHours(0, 0, 0, 0); return m; };
+    var diff = Math.round((d - today) / 864e5);
+    var wk = Math.round((monday(d) - monday(today)) / (7 * 864e5));
+    var md = MON[d.getMonth()] + " " + d.getDate();
+    var wd = DAYS.en[d.getDay()];
+    if (diff === 0) return "today (" + wd + ", " + md + ")";
+    if (diff === 1) return "tomorrow (" + wd + ", " + md + ")";
+    if (wk === 0 && diff > 1) return "this " + wd + " (" + md + ")";
+    if (wk === 1) return "next " + wd + " (" + md + ")";
+    return "on " + enPlain(d);
+  }
+
+  function fmtDate(v) {
+    if (!v) return L === "vi" ? "[chọn ngày]" : "[pick a date]";
+    var p = v.split("-");
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    if (L === "vi") return viDate(d);
+    return enDate(d);
+  }
+
+  function viMsg(t, date, reason) {
+    var S = $("self").value, R = $("to").value;
+    var Sc = S.charAt(0).toUpperCase() + S.slice(1);
+    var Rc = R.charAt(0).toUpperCase() + R.slice(1);
+    reason = reason.replace(/(^|\s)em(?=[\s,]|$)/g, "$1" + S);
+    if (t === "full") return Rc + " ơi, " + S + " xin phép nghỉ cả ngày " + date + " vì " + reason + ". " + "Nếu có việc gấp, " + R + " cứ nhắn " + S + ". " + Sc + " cảm ơn " + R + ".";
+    if (t === "offam" || t === "offpm") return Rc + " ơi, " + S + " xin phép nghỉ buổi " + (t === "offam" ? "sáng" : "chiều") + " " + date + " vì " + reason + ". " + Sc + " sẽ sắp xếp công việc để không ảnh hưởng tiến độ. " + Sc + " cảm ơn " + R + ".";
+    if (t === "latepm") return Rc + " ơi, chiều " + date + " " + S + " xin phép quay lại văn phòng muộn, dự kiến khoảng " + ($("time").value || "[giờ]") + ", vì " + reason + ". " + Sc + " xin lỗi vì sự bất tiện này. " + Sc + " cảm ơn " + R + ".";
+    return Rc + " ơi, sáng " + date + " " + S + " xin phép đến muộn, dự kiến khoảng " + ($("time").value || "[giờ]") + ", vì " + reason + ". " + Sc + " xin lỗi vì sự bất tiện này. " + Sc + " cảm ơn " + R + ".";
+  }
+
+  function enMsg(t, date, reason) {
+    var formal = $("tone").value === "formal", email = $("channel").value === "email";
+    var n = $("rname").value.trim();
+    var time = $("time").value || "[time]";
+    var what = t === "full" ? "take a full day off " + date
+      : t === "offam" ? "take the morning off " + date
+      : t === "offpm" ? "take the afternoon off " + date
+      : t === "latepm" ? "be back at the office late after lunch " + date + ", at around " + time
+      : "arrive late " + date + ", at around " + time;
+    var extra = t === "full" ? "I will stay reachable if anything urgent comes up." : "I will make sure my work stays on track.";
+    var hi = formal ? (n ? "Dear " + n + "," : "Hello,") : "Hey " + (n || "there") + ",";
+    var body = formal
+      ? "I would like to let you know that I will " + what + " because " + reason + ". " + extra + " Please let me know if you have any concerns."
+      : "Just a heads-up: I’ll " + what + " because " + reason + ". Let me know if anything needs covering.";
+    if (!email) return hi + " " + (formal ? body : body.charAt(0).toLowerCase() + body.slice(1)) + (formal ? " Thank you." : " Thanks!");
+    var subj = { full: "Leave request – ", offam: "Morning off – ", offpm: "Afternoon off – ", lateam: "Late arrival – ", latepm: "Late return after lunch – " }[t];
+    return "Subject: " + subj + enPlainFromValue($("date").value) + "\n\n" + hi + "\n\n" + body + "\n\n" + (formal ? "Thank you for your understanding.\n\nBest regards," : "Thanks,") + "\n" + ($("sname").value.trim() || "[Your name]");
+  }
+
+  function render() {
+    var t = type();
+    var rk = rkey(t);
+    var reason = (L === "vi" ? VI : EN)[rk][idx[L][rk]];
+    var date = fmtDate($("date").value);
+    $("msg").textContent = L === "vi" ? viMsg(t, date, reason) : enMsg(t, date, reason);
+    $("late-field").classList.toggle("hidden", t.indexOf("late") !== 0);
+    $("vi-pair").classList.toggle("hidden", L !== "vi");
+    $("en-pair").classList.toggle("hidden", L !== "en");
+    $("rname-field").classList.toggle("hidden", L !== "en");
+    $("sname-field").classList.toggle("hidden", L !== "en" || $("channel").value !== "email");
+  }
+
+  function applyLang() {
+    document.documentElement.lang = L;
+    document.querySelectorAll("[data-vi]").forEach(function (el) { el.textContent = el.getAttribute("data-" + L); });
+    $("copy").textContent = L === "vi" ? "Sao chép tin nhắn" : "Copy message";
+    render();
+  }
+
+  function shuffle() {
+    var rk = rkey(type()), n = (L === "vi" ? VI : EN)[rk].length, next;
+    do { next = Math.floor(Math.random() * n); } while (next === idx[L][rk] && n > 1);
+    idx[L][rk] = next;
+    render();
+  }
+
+  var tm = new Date();
+  tm.setDate(tm.getDate() + 1);
+  $("date").value = tm.getFullYear() + "-" + pad(tm.getMonth() + 1) + "-" + pad(tm.getDate());
+
+  var timeEdited = false;
+  $("time").addEventListener("input", function () { timeEdited = true; });
+  document.querySelectorAll('input[name="type"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      if (!timeEdited) $("time").value = type() === "latepm" ? "13:30" : "09:30";
+      render();
+    });
+  });
+  document.querySelectorAll('input[name="lang"]').forEach(function (r) {
+    r.addEventListener("change", function () { L = r.value; applyLang(); });
+  });
+  ["date", "time", "rname", "sname"].forEach(function (id) { $(id).addEventListener("input", render); });
+  ["self", "to", "tone", "channel"].forEach(function (id) { $(id).addEventListener("change", render); });
+  $("shuffle").addEventListener("click", shuffle);
+  $("copy").addEventListener("click", function () {
+    var btn = $("copy"), text = $("msg").textContent;
+    function done() { btn.textContent = L === "vi" ? "Đã sao chép" : "Copied"; setTimeout(function () { btn.textContent = L === "vi" ? "Sao chép tin nhắn" : "Copy message"; }, 1500); }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+  applyLang();
+})();
+</script>
+<script>
+if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); }); }
+</script>
+</body>
+</html>
